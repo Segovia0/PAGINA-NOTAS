@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Notas Universitario</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Control de Notas - Universidad</h1>
+    </header>
+
+    <main class="container">
+        <section class="stats-panel">
+            <div class="card">
+                <h3>Total Estudiantes</h3>
+                <p id="totalEstudiantes">0</p>
+            </div>
+            <div class="card">
+                <h3>Promedio General</h3>
+                <p id="promedioGeneral">0.00</p>
+            </div>
+        </section>
+
+        <div class="content-layout">
+            <section class="form-section">
+                <h2 id="formTitle">Registrar Estudiante</h2>
+                <form id="estudianteForm">
+                    <input type="hidden" id="editMode" value="false">
+                    <input type="hidden" id="oldCedula">
+
+                    <div class="form-group">
+                        <label for="nombre">Nombre Completo:</label>
+                        <input type="text" id="nombre" required minlength="4">
+                    </div>
+                    <div class="form-group">
+                        <label for="cedula">Cédula de Identidad:</label>
+                        <input type="text" id="cedula" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="carrera">PNF / Carrera:</label>
+                        <select id="carrera" required>
+                            <option value="default" selected disabled>-- Seleccione una opción --</option>
+                            <option value="PNF en Informática">PNF en Informática</option>
+                            <option value="PNF en Administración">PNF en Administración</option>
+                            <option value="PNF en Electrónica">PNF en Electrónica</option>
+                            <option value="Lic. en Enfermería">Lic. en Enfermería</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="indice">Índice Académico (1-20):</label>
+                        <input type="number" id="indice" step="0.01" min="1" max="20" required>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="submit" id="btnSubmit" class="btn btn-primary">Guardar Registro</button>
+                        <button type="button" id="btnCancelar" class="btn btn-secondary hidden">Cancelar Edición</button>
+                    </div>
+                </form>
+                <div id="alertBox" class="alert hidden"></div>
+            </section>
+
+            <section class="table-section">
+                <div class="table-header">
+                    <h2>Registros Guardados</h2>
+                    <input type="text" id="searchCedula" placeholder="🔍 Buscar por Cédula en tiempo real...">
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cédula</th>
+                                <th>Nombre</th>
+                                <th>Carrera / PNF</th>
+                                <th>Índice</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaEstudiantes">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

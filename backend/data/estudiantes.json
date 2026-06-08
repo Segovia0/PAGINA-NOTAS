@@ -1,0 +1,20 @@
+[
+  {
+    "nombre": "Giovanny Segovia",
+    "cedula": "31588187",
+    "carrera": "PNF en Informática",
+    "indice": 16
+  },
+  {
+    "nombre": "wilfredo Alvarez",
+    "cedula": "34667567",
+    "carrera": "PNF en Electrónica",
+    "indice": 20
+  },
+  {
+    "nombre": "Carlos colmenares",
+    "cedula": "1234567",
+    "carrera": "PNF en Informática",
+    "indice": 20
+  }
+]
