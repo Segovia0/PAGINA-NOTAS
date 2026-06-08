@@ -20,5 +20,5 @@ Sigue estos pasos para instalar y ejecutar el proyecto localmente:
 
 1. **Clonar o descargar el proyecto**:
    ```bash
-   git clone <URL_DE_TU_REPOSITORIO_GITHUB>
-   cd control-notas-universidad
+   git clone <https://github.com/Segovia0/PAGINA-NOTAS.git>
+   cd PAGINA-NOTAS
