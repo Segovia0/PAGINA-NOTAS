@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Control de Notas - Iniciar Sesión</title>
+    <link rel="stylesheet" href="css/styles.css"> 
+    <style>
+        /* Contenedor principal que centra vertical y horizontalmente la tarjeta en toda la pantalla */
+        .login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--background);
+            padding: 20px;
+        }
+
+        /* Tarjeta de login estilizada e interactiva */
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            background: var(--surface);
+            padding: 35px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Efecto sutil cuando la tarjeta carga en pantalla */
+        .login-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Título interno del Login */
+        .login-card h2 {
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 24px;
+            color: var(--primary);
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: var(--secondary);
+            margin-bottom: 30px;
+        }
+
+        /* Interactividad para los inputs (Campos de texto) */
+        .form-group input {
+            transition: all 0.25s ease;
+            background-color: #f8fafc;
+        }
+
+        .form-group input:focus {
+            background-color: var(--surface);
+            border-color: var(--primary);
+            transform: scale(1.01);
+        }
+
+        /* Botón de inicio de sesión ultra interactivo */
+        .btn-login-submit {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            font-size: 15px;
+            letter-spacing: 0.03em;
+            box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .btn-login-submit:hover {
+            transform: translateY(-1.5px);
+            box-shadow: 0 6px 12px -1px rgba(30, 58, 138, 0.3);
+        }
+
+        .btn-login-submit:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px -1px rgba(30, 58, 138, 0.2);
+        }
+
+        /* Texto de pie de página institucional */
+        .login-footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 12px;
+            color: var(--secondary);
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-screen">
+        <div class="login-card">
+            <h2>Acceso Administrativo</h2>
+            <p class="login-subtitle">Panel Universitario de Control de Notas</p>
+            
+            <form id="formLogin">
+                <div class="form-group">
+                    <label for="loginUser">Usuario Institucional</label>
+                    <input type="text" id="loginUser" required placeholder="Ingrese su usuario">
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">Contraseña de Seguridad</label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••">
+                </div>
+
+                <div id="loginError" class="alert alert-danger hidden"></div>
+
+                <button type="submit" class="btn btn-primary btn-login-submit">
+                    Iniciar Sesión
+                </button>
+            </form>
+
+            <div class="login-footer">
+                Área de Registro, Seguimiento y Control de Estudio
+            </div>
+        </div>
+    </div>
+
+      <script type="module">
+        const formLogin = document.getElementById('formLogin');
+        const loginUser = document.getElementById('loginUser');
+        const loginPassword = document.getElementById('loginPassword');
+        const loginError = document.getElementById('loginError');
+
+        formLogin.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Evitamos que la página se recargue físicamente
+
+            // Limpiamos alertas previas ocultando el contenedor de error
+            loginError.classList.add('hidden');
+            loginError.textContent = '';
+
+            // Capturamos los datos del formulario
+            const usuario = loginUser.value.trim();
+            const contrasena = loginPassword.value;
+
+            try {
+                // Hacemos la petición POST al backend que configuramos en server.js
+                const respuesta = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario, contrasena })
+                });
+
+                const data = await respuesta.json();
+
+                if (respuesta.ok) {
+                    // ¡ÉXITO! Guardamos el Token JWT y los datos del usuario en el localStorage del navegador
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('usuario', JSON.stringify(data.usuario));
+
+                    // Redireccionamos de inmediato al panel principal de control de notas
+                    window.location.href = 'index.html';
+                } else {
+                    // Si el servidor responde con error (400 o 401), lo mostramos en nuestra alerta estilizada
+                    loginError.textContent = data.error || 'Error al intentar iniciar sesión.';
+                    loginError.classList.remove('hidden');
+                }
+
+            } catch (error) {
+                console.error(error);
+                loginError.textContent = 'Error de conexión con el servidor.';
+                loginError.classList.remove('hidden');
+            }
+        });
+    </script>
+
+
+</body>
+</html>
