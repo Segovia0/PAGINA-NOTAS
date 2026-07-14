@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control de Estudio - PNF</title>
+    <style>
+        body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 20px; background: #f1f5f9; color: #0f172a; }
+        .header-container { max-width: 1400px; margin: 0 auto 20px; display: flex; justify-content: space-between; align-items: center; }
+        h2 { color: #1e40af; margin: 0; }
+        h2 span { background: #3b82f6; color: white; padding: 3px 8px; border-radius: 4px; font-size: 12px; margin-left: 10px; vertical-align: middle; }
+        .btn-honor { background: #d4af37; color: black; padding: 10px 20px; border-radius: 6px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 5px; }
+        .container { display: flex; gap: 25px; max-width: 1400px; margin: 0 auto; }
+        .panel-form { background: white; padding: 25px; border-radius: 12px; width: 380px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); height: fit-content; }
+        .panel-form h3 { margin-top: 0; margin-bottom: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; color: #1e293b; }
+        .panel-tabla { flex-grow: 1; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .panel-tabla h3 { margin-top: 0; margin-bottom: 20px; color: #475569; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; color: #475569; font-size: 13px; }
+        input, select { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; background: #f8fafc; }
+        input:focus, select:focus { outline: 2px solid #3b82f6; background: white; }
+        .notas-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        button { padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+        .btn-submit { background: #1e40af; color: white; width: 100%; margin-top: 10px; box-shadow: 0 4px 6px rgba(30, 64, 175, 0.2); }
+        .btn-submit:hover { background: #1d4ed8; }
+        .btn-submit.edit-mode { background: #10b981; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2); }
+        .btn-cancel { background: #64748b; color: white; width: 100%; margin-top: 5px; display: none; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 14px 10px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+        th { background: #f1f5f9; color: #64748b; font-weight: 600; text-transform: uppercase; font-size: 12px; }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #cbd5e1; display: block; }
+        .badge { padding: 5px 10px; border-radius: 20px; font-weight: bold; font-size: 11px; text-transform: uppercase; display: inline-block; }
+        .badge-Aprobado { background: #dcfce7; color: #166534; }
+        .badge-Reprobado { background: #fee2e2; color: #991b1b; }
+        .badge-Recuperación { background: #fef9c3; color: #854d0e; }
+        .actions-btn-group { display: flex; gap: 5px; }
+        .btn-action { padding: 6px 10px; font-size: 12px; border-radius: 4px; color: white; font-weight: 600; }
+        .btn-edit { background: #10b981; }
+        .btn-edit:hover { background: #059669; }
+        .btn-delete { background: #ef4444; }
+        .btn-delete:hover { background: #dc2626; }
+        .btn-report { background: #3b82f6; }
+        .btn-report:hover { background: #2563eb; }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <h2>Control de Estudio Institucional <span>PNF V2.0</span></h2>
+        <a href="honor_roll.html" target="_blank" class="btn-honor">🏆 Ver Cuadro de Honor</a>
+    </div>
+
+    <div class="container">
+        <div class="panel-form">
+            <h3 id="formTitle">Registrar Estudiante</h3>
+            <form id="formularioEstudiante">
+                <input type="hidden" id="actionState" value="create">
+                
+                <div class="form-group">
+                    <label>Cédula de Identidad:</label>
+                    <input type="text" id="cedula" name="cedula" placeholder="Ej: 24556789" required>
+                </div>
+                <div class="form-group">
+                    <label>Nombre Completo:</label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Ej: Carlos Mendoza" required>
+                </div>
+                <div class="form-group">
+                    <label>PNF (Programa Nacional de Formación):</label>
+                    <select id="pnf" name="pnf">
+                        <option value="PNF en Informática">PNF en Informática</option>
+                        <option value="PNF en Administración">PNF en Administración</option>
+                        <option value="PNF en Electrónica">PNF en Electrónica</option>
+                        <option value="PNF en Mecánica">PNF en Mecánica</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Notas por Corte (Valores del 0 al 20):</label>
+                    <div class="notas-grid">
+                        <input type="number" id="nota1" name="nota1" min="0" max="20" placeholder="Corte 1" required>
+                        <input type="number" id="nota2" name="nota2" min="0" max="20" placeholder="Corte 2" required>
+                        <input type="number" id="nota3" name="nota3" min="0" max="20" placeholder="Corte 3" required>
+                        <input type="number" id="nota4" name="nota4" min="0" max="20" placeholder="Corte 4" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Fotografía de Perfil (Fichero Binario):</label>
+                    <input type="file" id="foto" name="foto" accept="image/*">
+                </div>
+                
+                <button type="submit" id="btnSubmit" class="btn-submit">Guardar Estudiante</button>
+                <button type="button" id="btnCancel" class="btn-cancel" onclick="resetFormMode()">Cancelar Edición</button>
+            </form>
+        </div>
+
+        <div class="panel-tabla">
+            <h3>Listado General de Alumnos</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Foto</th>
+                        <th>Cédula</th>
+                        <th>Nombre</th>
+                        <th>PNF</th>
+                        <th>Notas</th>
+                        <th>Índice</th>
+                        <th>Estatus</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaEstudiantes"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

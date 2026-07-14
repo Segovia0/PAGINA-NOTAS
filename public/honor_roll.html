@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuadro de Honor Institucional</title>
+    <style>
+        body { font-family: 'Georgia', serif; background: #faf8f5; color: #2c2416; padding: 40px 20px; text-align: center; margin: 0; }
+        .no-print-zone { margin-bottom: 40px; }
+        .btn-print { background: #d4af37; color: black; padding: 12px 25px; border: none; font-size: 1.1em; border-radius: 5px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        .diploma-container { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 30px; }
+        .diploma-card { background: white; padding: 40px; border: 15px double #d4af37; border-radius: 4px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        h1 { font-size: 2.6em; color: #1e40af; font-family: 'Times New Roman', serif; margin: 10px 0; }
+        .student-name { font-size: 2.2em; font-weight: bold; color: #d4af37; margin: 20px 0; text-transform: uppercase; letter-spacing: 1px; }
+        .meta-info { font-size: 1.1em; color: #475569; line-height: 1.8; font-family: sans-serif; }
+        .photo-frame { width: 110px; height: 110px; border-radius: 50%; border: 4px solid #d4af37; object-fit: cover; margin: 0 auto 20px; display: block; }
+        @media print {
+            .no-print-zone { display: none !important; }
+            body { background: white; padding: 0; }
+            .diploma-card { border: 10px double #000; box-shadow: none; page-break-inside: avoid; margin-bottom: 40px; }
+            .student-name { color: #000; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="no-print-zone">
+        <button class="btn-print" onclick="window.print()">🖨️ Imprimir Lote de Diplomas</button>
+    </div>
+
+    <div class="diploma-container" id="cuadroHonorContenedor"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const contenedor = document.getElementById('cuadroHonorContenedor');
+            const respuesta = await fetch('/api/estudiantes/honor');
+            const sobresalientes = await respuesta.json();
+
+            if (sobresalientes.length === 0) {
+                contenedor.innerHTML = `<div class='diploma-card'><h2>No se registran alumnos con rendimiento meritorio (>= 18) en este período.</h2></div>`;
+                return;
+            }
+
+            sobresalientes.forEach(estudiante => {
+                const div = document.createElement('div');
+                div.className = 'diploma-card';
+                div.innerHTML = `
+                    <img src="/uploads/${estudiante.foto}" class="photo-frame">
+                    <h1>Reconocimiento de Excelencia Académica</h1>
+                    <p style="font-style: italic; font-size: 1.2em; margin-bottom: 5px;">Se confiere la mención honorífica por rendimiento sobresaliente a:</p>
+                    <div class="student-name">${estudiante.nombre}</div>
+                    <p class="meta-info">
+                        Cédula de Identidad: <strong>${estudiante.cedula}</strong><br>
+                        Cursante del de estudio del: <strong>${estudiante.pnf}</strong><br>
+                        Índice Académico Obtenido: <strong style="color: #166534; font-size: 1.2em;">${estudiante.promedio} Ptos</strong>
+                    </p>
+                `;
+                contenedor.appendChild(div);
+            });
+        });
+    </script>
+</body>
+</html>

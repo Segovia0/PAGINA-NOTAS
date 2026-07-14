@@ -1,0 +1,16 @@
+[
+  {
+    "cedula": "30654549",
+    "nombre": "wilfredo Alvarez",
+    "pnf": "PNF en Informática",
+    "notas": [
+      20,
+      20,
+      20,
+      20
+    ],
+    "promedio": 20,
+    "estatus": "Aprobado",
+    "foto": "1783976745044-519829280.jpg"
+  }
+]

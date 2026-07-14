@@ -1,14 +1,13 @@
 {
-  "name": "control-notas-universidad",
-  "version": "1.0.0",
-  "type": "module",
-  "description": "Sistema de Control de Notas Universitario",
+  "name": "control-estudio-pnf-v2",
+  "version": "2.0.0",
+  "description": "Sistema Full-Stack de Control de Estudio PNF con carga binaria",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3"
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1"
   }
 }
